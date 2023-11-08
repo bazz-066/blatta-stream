@@ -1,13 +1,10 @@
 use std::collections::HashMap;
 use std::thread::JoinHandle;
 use std::thread;
-use std::any::Any;
-use std::str;
 use std::os::unix::io::AsRawFd;
 use std::time::{Instant, Duration};
 use std::sync::{mpsc, Arc, Mutex};
 use std::sync::atomic::{AtomicBool,Ordering};
-use std::sync::mpsc::SendError;
 
 use smoltcp::phy::wait as phy_wait;
 use smoltcp::phy::{Device, RawSocket, RxToken};
@@ -62,14 +59,14 @@ impl StreamReaderController{
                 match data_received {
                     Ok(cmd) => match cmd {
                         Message::ReadyConnRequest => {
-                            let retval = rst_object.pop_conn();
-                            //if retval != true {
+                            let _retval = rst_object.pop_conn();
+                            //if _retval != true {
                             //    panic!("New ready connection failed to send");
                             //}
                         },
                         Message::StopThread => break
                     }, // TODO: process command
-                    Err(why) => {}
+                    Err(_why) => {}
                 }
 
                 let data_received = rst_object.packets_receiver.lock().unwrap().try_recv();
@@ -78,7 +75,7 @@ impl StreamReaderController{
                         //println!("New ready TCP connection!");
                         rst_object.push_conn(reconstructed_packets); 
                     }
-                    Err(why) => {}
+                    Err(_why) => {}
                 }
 
                 // sleep?
@@ -179,7 +176,7 @@ impl StreamReaderThread {
                             Ok(_) => {
                                 is_processed = true;
                             }
-                            Err(why) => {
+                            Err(_why) => {
                                 //println!("Removing thread {}", key);
                                 self.conn_list.remove(&key);
                             }
@@ -191,7 +188,7 @@ impl StreamReaderThread {
                             Ok(()) => {
                                 is_processed = true;
                             }
-                            Err(why) => {
+                            Err(_why) => {
                                 //println!("Removing thread {}", reverse_key);
                                 self.conn_list.remove(&reverse_key);
                             }

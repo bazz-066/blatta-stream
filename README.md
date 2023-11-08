@@ -44,3 +44,5 @@ fn main() {
 }
 ```
 To run this code, simply execute `sudo cargo run <interface name>`. Please note that the command has to be executed by root user.
+
+Another example is also provided in the lib.rs file. The test can be executed by running `sudo cargo test <interface name>`.
